@@ -268,7 +268,7 @@ app.use(express.json())
 app.use(bodyParser.json());
 
 
-const Buyers = require('../../models/Buyer.js');
+const Drivers = require('../../models/Driver.js');
 const { string } = require('@hapi/joi');
 
 
@@ -276,13 +276,13 @@ const { string } = require('@hapi/joi');
 
 const router = express.Router();
 
-const getAllBuyers = async(req, res) => {
+const getAllDrivers = async(req, res) => {
 
     try{
        
 
 
-        const mQuery = 'SELECT * FROM buyers';
+        const mQuery = 'SELECT * FROM drivers';
 
 
         const date = new Date();
@@ -317,14 +317,14 @@ const getAllBuyers = async(req, res) => {
     }
 }
 
-const getBuyer = async(req, res) => {
+const getDriver = async(req, res) => {
     const uID = req.params.uID;
     
     try{
        
 
 
-        const mQuery = 'SELECT * FROM buyers WHERE id = ?';
+        const mQuery = 'SELECT * FROM drivers WHERE id = ?';
        
 
         mysqlConnection.query(mQuery,[uID], (error, rows, fields) => {
@@ -362,7 +362,7 @@ const getBuyer = async(req, res) => {
 
 }
 
-const createBuyer = async (req, res) => {
+const createDriver = async (req, res) => {
     
 
     //validate data before using it
@@ -383,23 +383,26 @@ const createBuyer = async (req, res) => {
 
     let bodyData =  req.body;
     
-    const newBuyer = new Buyers({
+    const newDriver = new Drivers({
 
 
-            firstName: bodyData.firstName,
-            otherNames: bodyData.otherNames,
-            email: bodyData.email,
-            phone: bodyData.phone,
-            password: hashedPassword,
-            profile: bodyData.profile,
-            sponsor: bodyData.sponsor,
-            status: bodyData.status,
-            dateCreated: bodyData.dateCreated
-        });
+        firstName: bodyData.firstName,
+        otherNames: bodyData.otherNames,
+        email: bodyData.email,
+        phone: bodyData.phone,
+        password: hashedPassword,
+        profile: bodyData.Profile,
+        service: bodyData.service,
+        vehicle: bodyData.vehicle,
+        numberPlate : bodyData.numberPlate,
+        status: bodyData.status,
+        dateCreated: bodyData.dateCreated
+
+    });
     
     try{
 
-        const mQuerySelect = 'SELECT * FROM buyers WHERE phone = ?';
+        const mQuerySelect = 'SELECT * FROM drivers WHERE phone = ?';
        
 
         mysqlConnection.query(mQuerySelect,[bodyData.phone], (error, rows, fields) => {
@@ -417,16 +420,16 @@ const createBuyer = async (req, res) => {
                    
                 }else{
 
-                    const mQuery = 'INSERT INTO buyers SET?';
-                    mysqlConnection.query(mQuery, newBuyer, (error, rows, fields) => {
+                    const mQuery = 'INSERT INTO drivers SET?';
+                    mysqlConnection.query(mQuery, newDriver, (error, rows, fields) => {
                         
                         if (!error){
             
             
-                          
+                            
                             const uID = rows.insertId;
 
-                            const mQuery = 'SELECT * FROM buyers WHERE id = ?';
+                            const mQuery = 'SELECT * FROM drivers WHERE id = ?';
        
 
                             mysqlConnection.query(mQuery,[uID], (error, rows, fields) => {
@@ -451,6 +454,7 @@ const createBuyer = async (req, res) => {
                                     message: error.sqlMessage
                                 });
                                 })
+            
                       
                         }
                        else
@@ -479,7 +483,7 @@ const createBuyer = async (req, res) => {
 }
 
 
-const loginBuyer = async (req, res) => {
+const loginDriver = async (req, res) => {
 
     //validate data before using it
     // const {error} = loginValidation(req.body);
@@ -494,32 +498,71 @@ const loginBuyer = async (req, res) => {
 
     try{
 
-        const mQuerySelect = 'SELECT * FROM buyers WHERE phone = ?';
+        const mQuerySelect = 'SELECT * FROM drivers WHERE phone = ?';
        
         
         mysqlConnection.query(mQuerySelect,[bodyData.phone], async (error, rows, fields) => {
             
             if (!error)
                 if(rows[0]){
-                    const buyer =  rows[0];
+                    const driver =  rows[0];
 
                     
-                    const validPass = await bcrypt.compare(bodyData.password, buyer.password);
+                    const validPass = await bcrypt.compare(bodyData.password, driver.password);
                     if(!validPass) return res.status(400).json({
                         success: false,
                         message: 'Invalid password'});
                 
+                        const mQuery = 'UPDATE drivers SET? WHERE id =?';
+                        mysqlConnection.query(mQuery, [{status: "available"}, driver.id], (error, rows, fields) => {
+                            
+                            if (!error){
                 
-                        const token = jwt.sign({_id: buyer.id.toString()}, process.env.TOKEN_SECRET);
                 
-                        res.header('auth-token', token).json(
-                        { 
-                            success: true,
-                            message: buyer.id.toString(),
-                            authToken: token,
-                            contentData: buyer
+                                const token = jwt.sign({_id: driver.id.toString()}, process.env.TOKEN_SECRET);
                 
-                        });
+                                res.header('auth-token', token).json(
+                                { 
+                                    success: true,
+                                    message: driver.id.toString(),
+                                    authToken: token,
+                                    contentData: driver
+                        
+                                }); 
+                
+                          
+                            }
+                           else
+                           
+                            res.status(404).json({
+                                success: false,
+                                message: error.sqlMessage
+                            });
+                             })
+
+
+
+
+
+
+
+
+
+
+
+
+
+                
+                        // const token = jwt.sign({_id: driver.id.toString()}, process.env.TOKEN_SECRET);
+                
+                        // res.header('auth-token', token).json(
+                        // { 
+                        //     success: true,
+                        //     message: driver.id.toString(),
+                        //     authToken: token,
+                        //     contentData: driver
+                
+                        // });
                 }else{
 
                     return res.status(400).json({
@@ -541,7 +584,7 @@ const loginBuyer = async (req, res) => {
 }
 
 
-const updateBuyer = async (req, res) => {
+const updateDriver = async (req, res) => {
 
     const uID = req.params.uID;
     
@@ -554,7 +597,7 @@ const updateBuyer = async (req, res) => {
     }
 
     
-    const newBuyer = new Buyers({
+    const newDriver = new Drivers({
 
             firstName: bodyData.firstName,
             otherNames: bodyData.otherNames,
@@ -562,30 +605,32 @@ const updateBuyer = async (req, res) => {
             phone: bodyData.phone,
             password: bodyData.password,
             profile: mProfile,
-            sponsor: bodyData.sponsor,
+            service: bodyData.service,
+            vehicle: bodyData.vehicle,
+            numberPlate : bodyData.numberPlate,
             status: bodyData.status,
             dateCreated: bodyData.dateCreated
     });
     
     try{
 
-        const mQuery = 'UPDATE buyers SET? WHERE id =?';
-        mysqlConnection.query(mQuery, [newBuyer, uID], (error, rows, fields) => {
+        const mQuery = 'UPDATE drivers SET? WHERE id =?';
+        mysqlConnection.query(mQuery, [newDriver, uID], (error, rows, fields) => {
             
             if (!error){
 
 
-                const mQuerySelect = 'SELECT * FROM buyers WHERE id = ?';
+                const mQuerySelect = 'SELECT * FROM drivers WHERE id = ?';
        
         
                 mysqlConnection.query(mQuerySelect,[uID], async (error, rows, fields) => {
                     
                     if (!error)
                         if(rows[0]){
-                            const buyer =  rows[0];
+                            const driver =  rows[0];
                             res.status(200).json({
                                 success: true,
-                                contentData: buyer
+                                contentData: driver
                             });
                            
                         }else{
@@ -620,14 +665,14 @@ const updateBuyer = async (req, res) => {
 }
 
 
-const deleteBuyer = async (req, res) => {
+const deleteDriver = async (req, res) => {
 
     const uID = req.params.uID;
 
     
     try{
 
-        const mQuery = 'DELETE FROM buyers WHERE id = ?';
+        const mQuery = 'DELETE FROM drivers WHERE id = ?';
         mysqlConnection.query(mQuery, [uID], (error, rows, fields) => {
             
             if (!error){
@@ -660,9 +705,9 @@ const deleteBuyer = async (req, res) => {
 }
 
 
-module.exports.getAllBuyers = getAllBuyers;
-module.exports.createBuyer = createBuyer;
-module.exports.loginBuyer = loginBuyer;
-module.exports.getBuyer = getBuyer;
-module.exports.updateBuyer = updateBuyer;
-module.exports.deleteBuyer = deleteBuyer;
+module.exports.getAllDrivers = getAllDrivers;
+module.exports.createDriver  = createDriver;
+module.exports.loginDriver   = loginDriver;
+module.exports.getDriver     = getDriver;
+module.exports.updateDriver  = updateDriver;
+module.exports.deleteDriver  = deleteDriver;

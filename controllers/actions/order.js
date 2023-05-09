@@ -247,6 +247,7 @@ const addOrder = async (req, res) => {
 
         items: bodyData.items,
         clientID: bodyData.clientID,
+        clientFcmToken: bodyData.clientFcmToken,
         receiverPhone: bodyData.receiverPhone,
         email: bodyData.email,
         address: bodyData.address,
@@ -257,6 +258,8 @@ const addOrder = async (req, res) => {
         paymentMode: bodyData.paymentMode,
         paymentStatus: bodyData.paymentStatus,
         status: bodyData.status,
+        qrCode: bodyData.qrCode,
+        signature: bodyData.signature,
         dateCreated: bodyData.dateCreated
     });
 
@@ -326,12 +329,13 @@ const updateOrder = async (req, res) => {
 
     const uID = req.params.uID;
 
-    let bodyData =  JSON.parse(req.body.bodyData);
+    let bodyData =  req.body;
 
-    const newOrder = new Orders({
+    const mOrder = new Orders({
 
         items: bodyData.items,
         clientID: bodyData.clientID,
+        clientFcmToken: bodyData.clientFcmToken,
         receiverPhone: bodyData.receiverPhone,
         email: bodyData.email,
         address: bodyData.address,
@@ -342,22 +346,52 @@ const updateOrder = async (req, res) => {
         paymentMode: bodyData.paymentMode,
         paymentStatus: bodyData.paymentStatus,
         status: bodyData.status,
+        qrCode: bodyData.qrCode,
+        signature: bodyData.signature,
         dateCreated: bodyData.dateCreated
 });
 
 
     try{
 
-        const mQuery = 'UPDATE orders SET? WHERE id =?';
-        mysqlConnection.query(mQuery, [newOrder, uID], (error, rows, fields) => {
+        const mQuery = 'UPDATE orders SET ? WHERE id =?';
+        mysqlConnection.query(mQuery, [mOrder, uID], (error, rows, fields) => {
             
             if (!error){
 
 
-                res.status(200).json({
-                    success: true,
-                    contentData: rows
-                });
+                //console.log(uID);
+                
+                //const uID = rows.insertId;
+
+                const mQuery = 'SELECT * FROM orders WHERE id = ?';
+
+
+                mysqlConnection.query(mQuery,[uID], (error, rows, fields) => {
+                    
+                    if (!error)
+                        if(!rows)
+                            res.status(404).json({
+                                success: false,
+                                message: "Order not found"
+                            });
+                        else     
+                            res.status(200).json({
+                                success: true,
+                                contentData: rows[0]
+                            });
+        
+                    else
+                    //console.log(err.sqlMessage);
+        
+                    res.status(404).json({
+                        success: false,
+                        message: error.sqlMessage
+                    });
+                    })
+
+
+                
 
           
             }

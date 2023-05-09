@@ -1,8 +1,11 @@
 const mysqlConnection = require('./db');
 const Express = require('express');
-const cors = require("cors");
+const cors = require('cors');
 const mongoose = require("mongoose");
+
+const adminsRouter = require("./routes/admins")
 const buyersRouter  = require("./routes/buyers")
+const driversRouter  = require("./routes/drivers")
 const vendorsRouter  = require("./routes/vendors")
 const productsRouter  = require("./routes/products")
 const addressesRouter  = require("./routes/addresses")
@@ -64,7 +67,9 @@ const socketio = require('socket.io')(http);
 
 
 
+    app.use('/admins', adminsRouter);
     app.use('/buyers', buyersRouter);
+    app.use('/drivers', driversRouter);
     app.use('/vendors', vendorsRouter);
     app.use('/products', productsRouter);
     app.use('/addresses', addressesRouter);    
@@ -89,18 +94,22 @@ const socketio = require('socket.io')(http);
     socketio.on("connection", (userSocket) => {
 
         console.log('Server started with socket io');
-         console.log(userSocket.id, 'Has joined');
+        // console.log(userSocket.id, 'Has joined');
         userSocket.on("add_order", (data) => {
             
             clients[data.clientID] = userSocket;
             userSocket.broadcast.emit("receive_order", data)
         });
+        userSocket.on("change_location", (data) => {
+            
+            userSocket.broadcast.emit(`live_location_${data.userID}`, data);
+        });
         userSocket.on("edit_order", (data) => {
-
 
             let targetId = data.clientID;
 
             clients[targetId] = userSocket;
+            userSocket.broadcast.emit("on_edit", data);
             if (clients[targetId]) clients[targetId].emit("edited_order", data);
 
     

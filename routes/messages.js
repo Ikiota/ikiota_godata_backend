@@ -30,6 +30,7 @@ var storage = multer.diskStorage({
 router.get('/', messageActions.getAllMessages);
 router.get('/:uID', messageActions.getMessage);
 router.post('/add', upload.array('myFiles'), messageActions.addMessage);
+router.post('/public/add', upload.array('myFiles'), messageActions.addPublicMessage);
 router.patch('/update/:uID', messageActions.updateMessage);
 router.delete('/:uID', messageActions.deleteMessage);
 

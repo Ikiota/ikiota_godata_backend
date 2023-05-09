@@ -8,7 +8,7 @@ router.get('/', orderActions.getAllOrders);
 router.get('/:uID', verify, orderActions.getCurrentUserOrders);
 router.get('/:uID', orderActions.getOrder);
 router.post('/add', orderActions.addOrder);
-router.patch('/update/:uID', orderActions.updateOrder);
-router.delete('/:uID', orderActions.deleteOrder);
+router.patch('/update/:uID', verify, orderActions.updateOrder);
+router.delete('/:uID', verify, orderActions.deleteOrder);
 
 module.exports = router;

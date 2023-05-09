@@ -250,7 +250,7 @@ app.use(bodyParser.json());
 
 //const Products = require('../../models/Product.js');
 const { string } = require('@hapi/joi');
-
+const ProspectiveSuppliers = require('../../models/ProspectiveSuppliers.js');
 
 
 
@@ -423,6 +423,101 @@ const addProduct = async (req, res) => {
 }
 
 
+const suggestProduct = async (req, res) => {
+
+
+
+    // //check if request has image file
+    // const files = req.files
+    
+   
+    // if (!files || files.length == 0) return res.status(400).json({
+    //     success: false,
+    //     message: 'No file uploaded'
+    // });
+
+
+    // let mFiles = files.map(element => 
+    //     element.path.replace("\\", "/")
+    // ); 
+
+
+   
+
+    let bodyData =  req.body;
+    console.log(bodyData);
+
+    const newProspect = new ProspectiveSuppliers({
+            firstName: bodyData.firstName,
+            lastName: bodyData.lastName,
+            phone: bodyData.phone,
+            email: bodyData.email,
+            category: bodyData.category,
+            company: bodyData.company,
+            product: bodyData.product,
+            description: bodyData.description,
+            status: bodyData.status,
+            dateCreated: bodyData.dateCreated
+        });
+        try{
+
+            const mQuerySelect = 'SELECT * FROM prospective_suppliers WHERE phone = ? AND product =?';
+           
+    
+            mysqlConnection.query(mQuerySelect,[bodyData.phone, bodyData.product], (error, rows, fields) => {
+                
+                if (!error){
+                   
+    
+                    if(!rows[0]){
+                        
+                        const mQuery = 'INSERT INTO prospective_suppliers SET?';
+                        mysqlConnection.query(mQuery, newProspect, (error, rows, fields) => {
+                            
+                            if (!error){
+                
+                
+                                res.status(200).json({
+                                    success: true,
+                                    contentData: rows
+                                });
+                
+                          
+                            }
+                           else
+                           
+                            res.status(404).json({
+                                success: false,
+                                message: error.sqlMessage
+                            });
+                             })
+    
+                       
+                    }else{
+    
+                        res.status(404).json({
+                            success: false,
+                            message: "This product has already been suggested by this induvidual!"
+                        });
+    
+                    }
+                }
+                })
+    
+    
+           
+    
+           
+        }catch(err){
+    
+            res.status(404).json({
+                success: false,
+                message: err
+            });
+        }
+}
+
+
 const updateProduct = async (req, res) => {
 
     const uID = req.params.uID;
@@ -475,6 +570,7 @@ const deleteProduct = async (req, res) => {
 
 module.exports.getAllProducts = getAllProducts;
 module.exports.addProduct = addProduct;
+module.exports.suggestProduct = suggestProduct;
 module.exports.getProduct = getProduct;
 module.exports.updateProduct = updateProduct;
 module.exports.deleteProduct = deleteProduct;

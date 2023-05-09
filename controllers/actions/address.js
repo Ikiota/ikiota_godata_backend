@@ -242,7 +242,7 @@ const updateAddress = async (req, res) => {
 
     const uID = req.params.uID;
     
-    let bodyData =  JSON.parse(req.body.bodyData);
+    let bodyData =  req.body;
   
     const newAddress = new Addresses({
 
@@ -267,7 +267,7 @@ const updateAddress = async (req, res) => {
 
                 res.status(200).json({
                     success: true,
-                    contentData: rows
+                    contentData: newAddress
                 });
 
           

@@ -268,7 +268,7 @@ app.use(express.json())
 app.use(bodyParser.json());
 
 
-const Buyers = require('../../models/Buyer.js');
+const Admin = require('../../models/Admin.js');
 const { string } = require('@hapi/joi');
 
 
@@ -276,13 +276,13 @@ const { string } = require('@hapi/joi');
 
 const router = express.Router();
 
-const getAllBuyers = async(req, res) => {
+const getAllAdmins = async(req, res) => {
 
     try{
        
 
 
-        const mQuery = 'SELECT * FROM buyers';
+        const mQuery = 'SELECT * FROM admins';
 
 
         const date = new Date();
@@ -317,14 +317,14 @@ const getAllBuyers = async(req, res) => {
     }
 }
 
-const getBuyer = async(req, res) => {
+const getAdmin = async(req, res) => {
     const uID = req.params.uID;
     
     try{
        
 
 
-        const mQuery = 'SELECT * FROM buyers WHERE id = ?';
+        const mQuery = 'SELECT * FROM admins WHERE id = ?';
        
 
         mysqlConnection.query(mQuery,[uID], (error, rows, fields) => {
@@ -362,7 +362,7 @@ const getBuyer = async(req, res) => {
 
 }
 
-const createBuyer = async (req, res) => {
+const createAdmin = async (req, res) => {
     
 
     //validate data before using it
@@ -383,7 +383,7 @@ const createBuyer = async (req, res) => {
 
     let bodyData =  req.body;
     
-    const newBuyer = new Buyers({
+    const newAdmin = new Admin({
 
 
             firstName: bodyData.firstName,
@@ -392,14 +392,15 @@ const createBuyer = async (req, res) => {
             phone: bodyData.phone,
             password: hashedPassword,
             profile: bodyData.profile,
-            sponsor: bodyData.sponsor,
+            roles: bodyData.roles,
+            staffID: bodyData.staffID,
             status: bodyData.status,
             dateCreated: bodyData.dateCreated
         });
     
     try{
 
-        const mQuerySelect = 'SELECT * FROM buyers WHERE phone = ?';
+        const mQuerySelect = 'SELECT * FROM admins WHERE phone = ?';
        
 
         mysqlConnection.query(mQuerySelect,[bodyData.phone], (error, rows, fields) => {
@@ -417,8 +418,8 @@ const createBuyer = async (req, res) => {
                    
                 }else{
 
-                    const mQuery = 'INSERT INTO buyers SET?';
-                    mysqlConnection.query(mQuery, newBuyer, (error, rows, fields) => {
+                    const mQuery = 'INSERT INTO admins SET?';
+                    mysqlConnection.query(mQuery, newAdmin, (error, rows, fields) => {
                         
                         if (!error){
             
@@ -426,7 +427,7 @@ const createBuyer = async (req, res) => {
                           
                             const uID = rows.insertId;
 
-                            const mQuery = 'SELECT * FROM buyers WHERE id = ?';
+                            const mQuery = 'SELECT * FROM admins WHERE id = ?';
        
 
                             mysqlConnection.query(mQuery,[uID], (error, rows, fields) => {
@@ -479,7 +480,7 @@ const createBuyer = async (req, res) => {
 }
 
 
-const loginBuyer = async (req, res) => {
+const loginAdmin = async (req, res) => {
 
     //validate data before using it
     // const {error} = loginValidation(req.body);
@@ -494,30 +495,31 @@ const loginBuyer = async (req, res) => {
 
     try{
 
-        const mQuerySelect = 'SELECT * FROM buyers WHERE phone = ?';
+        const mQuerySelect = 'SELECT * FROM admins WHERE phone = ?';
        
         
         mysqlConnection.query(mQuerySelect,[bodyData.phone], async (error, rows, fields) => {
             
             if (!error)
                 if(rows[0]){
-                    const buyer =  rows[0];
 
-                    
-                    const validPass = await bcrypt.compare(bodyData.password, buyer.password);
+                    const admin =  rows[0];
+
+                   
+                    const validPass = await bcrypt.compare(bodyData.password, admin.password);
                     if(!validPass) return res.status(400).json({
                         success: false,
                         message: 'Invalid password'});
                 
                 
-                        const token = jwt.sign({_id: buyer.id.toString()}, process.env.TOKEN_SECRET);
+                        const token = jwt.sign({_id: admin.id.toString()}, process.env.TOKEN_SECRET);
                 
                         res.header('auth-token', token).json(
                         { 
                             success: true,
-                            message: buyer.id.toString(),
+                            message: admin.id.toString(),
                             authToken: token,
-                            contentData: buyer
+                            contentData: admin
                 
                         });
                 }else{
@@ -541,7 +543,7 @@ const loginBuyer = async (req, res) => {
 }
 
 
-const updateBuyer = async (req, res) => {
+const updateAdmin = async (req, res) => {
 
     const uID = req.params.uID;
     
@@ -554,7 +556,7 @@ const updateBuyer = async (req, res) => {
     }
 
     
-    const newBuyer = new Buyers({
+    const newAdmin = new Admin({
 
             firstName: bodyData.firstName,
             otherNames: bodyData.otherNames,
@@ -562,30 +564,31 @@ const updateBuyer = async (req, res) => {
             phone: bodyData.phone,
             password: bodyData.password,
             profile: mProfile,
-            sponsor: bodyData.sponsor,
+            roles: bodyData.roles,
+            staffID: bodyData.staffID,
             status: bodyData.status,
             dateCreated: bodyData.dateCreated
     });
     
     try{
 
-        const mQuery = 'UPDATE buyers SET? WHERE id =?';
-        mysqlConnection.query(mQuery, [newBuyer, uID], (error, rows, fields) => {
+        const mQuery = 'UPDATE admins SET? WHERE id =?';
+        mysqlConnection.query(mQuery, [newAdmin, uID], (error, rows, fields) => {
             
             if (!error){
 
 
-                const mQuerySelect = 'SELECT * FROM buyers WHERE id = ?';
+                const mQuerySelect = 'SELECT * FROM admins WHERE id = ?';
        
         
                 mysqlConnection.query(mQuerySelect,[uID], async (error, rows, fields) => {
                     
                     if (!error)
                         if(rows[0]){
-                            const buyer =  rows[0];
+                            const admin =  rows[0];
                             res.status(200).json({
                                 success: true,
-                                contentData: buyer
+                                contentData: admin
                             });
                            
                         }else{
@@ -620,14 +623,14 @@ const updateBuyer = async (req, res) => {
 }
 
 
-const deleteBuyer = async (req, res) => {
+const deleteAdmin = async (req, res) => {
 
     const uID = req.params.uID;
 
     
     try{
 
-        const mQuery = 'DELETE FROM buyers WHERE id = ?';
+        const mQuery = 'DELETE FROM admins WHERE id = ?';
         mysqlConnection.query(mQuery, [uID], (error, rows, fields) => {
             
             if (!error){
@@ -660,9 +663,9 @@ const deleteBuyer = async (req, res) => {
 }
 
 
-module.exports.getAllBuyers = getAllBuyers;
-module.exports.createBuyer = createBuyer;
-module.exports.loginBuyer = loginBuyer;
-module.exports.getBuyer = getBuyer;
-module.exports.updateBuyer = updateBuyer;
-module.exports.deleteBuyer = deleteBuyer;
+module.exports.getAllAdmins = getAllAdmins;
+module.exports.createAdmin = createAdmin;
+module.exports.loginAdmin = loginAdmin;
+module.exports.getAdmin = getAdmin;
+module.exports.updateAdmin = updateAdmin;
+module.exports.deleteAdmin = deleteAdmin;

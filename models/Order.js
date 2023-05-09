@@ -67,6 +67,7 @@ const mongoose = require('mongoose');
 
 var Orders = function(order){
     this.clientID               = order.clientID;
+    this.clientFcmToken         = order.clientFcmToken;
     this.receiverPhone          = order.receiverPhone;
     this.email                  = order.email;
     this.items                  = order.items;
@@ -77,7 +78,9 @@ var Orders = function(order){
     this.totalPrice             = order.totalPrice;
     this.paymentMode            = order.paymentMode;
     this.paymentStatus          = order.paymentStatus;
-    this.status                 = order.status ?? "pending";
+    this.status                 = order.status ?? "Pending";
+    this.qrCode                 = order.qrCode;
+    this.signature              = order.signature;
     this.dateCreated            = order.dateCreated ?? new Date();
     
   };
