@@ -1,8 +1,8 @@
 const express = require("express");
 const multer = require('multer')
 
-const categoryActions = require("./../controllers/actions/category");
-const verify = require("./../controllers/validations/verifyToken");
+const categoryActions = require("../controllers/actions/category");
+const verify = require("../controllers/validations/verifyToken");
 
 
 const router = express.Router();

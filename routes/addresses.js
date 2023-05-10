@@ -1,8 +1,8 @@
 const express = require("express");
 const multer = require('multer')
 
-const addressActions = require("./../controllers/actions/address");
-const verify = require("./../controllers/validations/verifyToken");
+const addressActions = require("../controllers/actions/address");
+const verify = require("../controllers/validations/verifyToken");
 
 
 const router = express.Router();
