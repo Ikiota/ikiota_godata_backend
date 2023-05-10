@@ -13,15 +13,21 @@ const mysql = require('mysql');
 
 
    
-var mysqlConnection = mysql.createConnection({
-    host: 'localhost',
-    user: 'root',
-    password: '',
-    database: 'nunuapp',
-    multipleStatements: true
-    });
+// var mysqlConnection = mysql.createConnection({
+//     host: 'localhost',
+//     user: 'root',
+//     password: '',
+//     database: 'nunuapp',
+//     multipleStatements: true
+//     });
 
-
+    var mysqlConnection = mysql.createConnection({
+        host: '141.136.42.177',
+        user: 'shopiagroup',
+        password: 'p@55Shopia',
+        database: 'nunuapp',
+        multipleStatements: true
+        });
     mysqlConnection.connect((err)=> {
         if(!err)
         console.log('Connection Established Successfully');

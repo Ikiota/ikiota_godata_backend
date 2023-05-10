@@ -1,7 +1,7 @@
 const express = require("express");
 const multer = require('multer')
-const adminsActions = require("../controllers/actions/admin");
-const verify = require("../controllers/validations/verifyToken");
+const adminsActions = require("./../controllers/actions/admin");
+const verify = require("./../controllers/validations/verifyToken");
 
 const router = express.Router();
 
