@@ -1,4 +1,4 @@
-const mysqlConnection = require('../../db');
+const mysqlConnection = require('./../../db');
 const express = require('express');
 const mongoose = require('mongoose');
 const bodyParser = require('body-parser');
@@ -17,7 +17,7 @@ app.use(express.json())
 app.use(bodyParser.json());
 
 
-const Brands = require('./../../models/Brand.js');
+const Brands = require('../../models/Brand.js');
 const { string } = require('@hapi/joi');
 
 
