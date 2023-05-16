@@ -22,8 +22,8 @@ const mysql = require('mysql');
 //     });
 
     var mysqlConnection = mysql.createConnection({
-        host: '127.0.0.1',
-        user: 'root',
+        host: '127.0.0.1:306',
+        user: 'admin',
         password: 'p@55Admin',
         database: 'shopiadatabase',
         port: 3306,
