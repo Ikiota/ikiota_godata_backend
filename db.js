@@ -22,7 +22,7 @@ const mysql = require('mysql');
 //     });
 
     var mysqlConnection = mysql.createConnection({
-        host: '127.0.0.1:306',
+        host: '127.0.0.1:3306',
         user: 'admin',
         password: 'p@55Admin',
         database: 'shopiadatabase',
