@@ -26,6 +26,7 @@ const mysql = require('mysql');
         user: 'root',
         password: 'p@55Admin',
         database: 'shopiadatabase',
+        port: 3306,
         multipleStatements: true
         });
     mysqlConnection.connect((err)=> {
