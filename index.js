@@ -66,9 +66,6 @@ const socketio = require('socket.io')(http);
 
 
 
-app.get('/api/', function(req, res){
-    res.send("Hello from Shopia, we are live now!!!");
-});
 
     app.use('/admins', adminsRouter);
     app.use('/buyers', buyersRouter);
