@@ -22,10 +22,10 @@ const mysql = require('mysql');
 //     });
 
     var mysqlConnection = mysql.createConnection({
-        host: '141.136.42.177',
-        user: 'shopiagroup',
-        password: 'p@55Shopia',
-        database: 'nunuapp',
+        host: 'localhost',
+        user: 'root',
+        password: 'p@55Admin',
+        database: 'shopiadatabase',
         multipleStatements: true
         });
     mysqlConnection.connect((err)=> {
