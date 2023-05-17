@@ -66,12 +66,12 @@ const socketio = require('socket.io')(http);
 
 
 
-    app.get("/api", (req, res) => {
-       res.send("Hello from shopia!We are loive now!!!");
+    app.get("/api/", (req, res) => {
+       res.send("Hello from shopia!We are live now!!!");
     });
 
-    app.use('api/admins', adminsRouter);
-    app.use('api/buyers', buyersRouter);
+    app.use('/api/admins', adminsRouter);
+    app.use('/api/buyers', buyersRouter);
     app.use('/drivers', driversRouter);
     app.use('/vendors', vendorsRouter);
     app.use('/products', productsRouter);
