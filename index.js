@@ -67,8 +67,8 @@ const socketio = require('socket.io')(http);
 
 
 
-    app.use('api/admins', adminsRouter);
-    app.use('/buyers', buyersRouter);
+    app.use('./admins', adminsRouter);
+    app.use('api/buyers', buyersRouter);
     app.use('/drivers', driversRouter);
     app.use('/vendors', vendorsRouter);
     app.use('/products', productsRouter);
