@@ -62,9 +62,10 @@ const socketio = require('socket.io')(http);
     
     app.use(Express.json())
     app.use(cors());
-    app.use('/api/uploads', Express.static(__dirname +'/uploads'));
+    app.use('/uploads', Express.static(__dirname +'/uploads'));
 
 
+//app.use('/uploads', express.static('uploads'));
 
     app.get("/api/", (req, res) => {
        res.send("Hello from shopia!We are live now!!!");
