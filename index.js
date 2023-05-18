@@ -70,11 +70,10 @@ const socketio = require('socket.io')(http);
        res.send("Hello from shopia!We are live now!!!");
     });
 
- app.get("/api/uploads", (req, res) => {
-       res.send("Hello from shopia uploads!We are live now!!!");
-    });
+ 
 
- //app.use('/api/uploads', express.static(path.join(__dirname, '/api/uploads')));
+ app.use('/api/uploads',  Express.static('api/uploads'));
+
 
     app.use('/api/admins', adminsRouter);
     app.use('/api/buyers', buyersRouter);
