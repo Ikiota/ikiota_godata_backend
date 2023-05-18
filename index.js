@@ -62,7 +62,7 @@ const socketio = require('socket.io')(http);
     
     app.use(Express.json())
     app.use(cors());
-    //app.use('/api/uploads', Express.static(__dirname +'/uploads'));
+    app.use('/api/uploads', Express.static("api +'/uploads'));
 
 
    
@@ -72,7 +72,7 @@ const socketio = require('socket.io')(http);
 
  
 
- app.use('/api/uploads',  Express.static(__dirname +'/uploads'));
+// app.use('/api/uploads',  Express.static(__dirname +'/uploads'));
 
 
     app.use('/api/admins', adminsRouter);
