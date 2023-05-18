@@ -62,7 +62,7 @@ const socketio = require('socket.io')(http);
     
     app.use(Express.json())
     app.use(cors());
-    //app.use('/uploads', Express.static(__dirname +'/uploads'));
+    app.use('/uploads', Express.static(__dirname +'/uploads'));
 
 
    
@@ -70,7 +70,7 @@ const socketio = require('socket.io')(http);
        res.send("Hello from shopia!We are live now!!!");
     });
 
- app.use('/api/uploads', express.static(path.join(__dirname, '/api/uploads')));
+ //app.use('/api/uploads', express.static(path.join(__dirname, '/api/uploads')));
 
     app.use('/api/admins', adminsRouter);
     app.use('/api/buyers', buyersRouter);
