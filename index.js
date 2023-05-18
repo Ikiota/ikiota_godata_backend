@@ -62,7 +62,7 @@ const socketio = require('socket.io')(http);
     
     app.use(Express.json())
     app.use(cors());
-    app.use('/uploads', Express.static(__dirname +'/uploads'));
+    app.use('/api/uploads', Express.static(__dirname +'/uploads'));
 
 
 
@@ -72,18 +72,18 @@ const socketio = require('socket.io')(http);
 
     app.use('/api/admins', adminsRouter);
     app.use('/api/buyers', buyersRouter);
-    app.use('/drivers', driversRouter);
-    app.use('/vendors', vendorsRouter);
-    app.use('/products', productsRouter);
-    app.use('/addresses', addressesRouter);    
-    app.use('/categories', categoriesRouter);
-    app.use('/subCategories', subCategoriesRouter);
-    app.use('/orders', ordersRouter);
-    app.use('/brands', brandsRouter);
-    app.use('/suppliers', suppliersRouter);
-    app.use('/stores', storesRouter);
-    app.use('/ads', adsRouter);
-    app.use('/messages', messagesRouter);
+    app.use('/api/drivers', driversRouter);
+    app.use('/api/vendors', vendorsRouter);
+    app.use('/api/products', productsRouter);
+    app.use('/api/addresses', addressesRouter);    
+    app.use('/api/categories', categoriesRouter);
+    app.use('/api/subCategories', subCategoriesRouter);
+    app.use('/api/orders', ordersRouter);
+    app.use('/api/brands', brandsRouter);
+    app.use('/api/suppliers', suppliersRouter);
+    app.use('/api/stores', storesRouter);
+    app.use('/api/ads', adsRouter);
+    app.use('/api/messages', messagesRouter);
 
 
 
