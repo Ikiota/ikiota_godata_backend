@@ -64,6 +64,8 @@ const socketio = require('socket.io')(http);
     app.use(cors());
    
    
+app.use(express.static('/api/'));
+
    
     app.get("/api/", (req, res) => {
        res.send("Hello from shopia!We are live now!!!");
