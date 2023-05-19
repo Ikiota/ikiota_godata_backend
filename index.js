@@ -72,8 +72,8 @@ const socketio = require('socket.io')(http);
     });
 
    
-    //app.use('uploads',  Express.static(__dirname +'uploads'));
-app.use(Express.static(__dirname +'uploads'));
+    app.use('uploads',  Express.static(__dirname +'uploads'));
+//app.use(Express.static(__dirname +'uploads'));
 
 
 
