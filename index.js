@@ -3,6 +3,7 @@ const Express = require('express');
 const cors = require('cors');
 const mongoose = require("mongoose");
 
+const uploadsRouter = require("./uploads")
 const adminsRouter = require("./routes/admins")
 const buyersRouter  = require("./routes/buyers")
 const driversRouter  = require("./routes/drivers")
@@ -73,7 +74,7 @@ const socketio = require('socket.io')(http);
    
     app.use('/api/',  Express.static(__dirname +'uploads'));
 
- app.use('/api/uploads',  Express.static(__dirname +'./uploads'));
+ app.use('/api/uploads',  uploadsRouter);
 
 
     app.use('/api/admins', adminsRouter);
