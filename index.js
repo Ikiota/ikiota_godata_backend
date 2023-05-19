@@ -66,13 +66,14 @@ const socketio = require('socket.io')(http);
    
    
 
+app.use('/uploads', Express.static(__dirname +'/uploads'));
    
     app.get("/api/", (req, res) => {
        res.send("Hello from shopia!We are live now!!!");
     });
 
    
-    app.use('/uploads',  Express.static(__dirname +'uploads'));
+    
 //app.use(Express.static(__dirname +'uploads'));
 
 
