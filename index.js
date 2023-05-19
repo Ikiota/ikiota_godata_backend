@@ -69,7 +69,7 @@ const socketio = require('socket.io')(http);
        res.send("Hello from shopia!We are live now!!!");
     });
 
-  app.use('/api/uploads',  Express.static(__dirname +'./uploads'));
+  app.use('/api/uploads',  Express.static(__dirname +'uploads'));
 
 // app.use('/api/uploads',  Express.static(__dirname +'/uploads'));
 
