@@ -64,7 +64,7 @@ const socketio = require('socket.io')(http);
     app.use(cors());
    
    
-app.use(Express.static('/api/'));
+app.use(Express.static('/api/uploads'));
 
    
     app.get("/api/", (req, res) => {
