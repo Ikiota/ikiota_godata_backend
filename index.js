@@ -64,14 +64,14 @@ const socketio = require('socket.io')(http);
     app.use(cors());
    
    
-app.use(Express.static('/api/uploads'));
 
    
     app.get("/api/", (req, res) => {
        res.send("Hello from shopia!We are live now!!!");
     });
 
-  app.use('/api/uploads',  Express.static(__dirname +'uploads'));
+    app.use(Express.static('/api/uploads'));
+    app.use('/api/uploads',  Express.static(__dirname +'uploads'));
 
 // app.use('/api/uploads',  Express.static(__dirname +'/uploads'));
 
