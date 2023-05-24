@@ -262,7 +262,7 @@ const getAllProducts = async(req, res) => {
        
 
 
-        const mQuery = 'SELECT * FROM Products';
+        const mQuery = 'SELECT * FROM products';
 
 
         const date = new Date();
