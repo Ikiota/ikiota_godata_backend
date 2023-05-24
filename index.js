@@ -99,7 +99,7 @@ app.use('/api/uploads', Express.static('uploads'));
 
 
 
-    const port =  process.env.PORT || 900;
+    const port =  process.env.PORT || 80;
 
 
 
