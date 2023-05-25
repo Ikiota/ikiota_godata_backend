@@ -257,69 +257,69 @@ const ProspectiveSuppliers = require('../../models/ProspectiveSuppliers.js');
 const router = express.Router();
 
 const getAllProducts = async(req, res) => {
-        console.log("received data);
+//         console.log("received data");
 
-         res.send("Hello from shopia!We are live now!!!");
+//          res.send("Hello from shopia!We are live now!!!");
 
-//     try{
+    try{
        
 
 
-//         const mQuery = 'SELECT * FROM products';
+        const mQuery = 'SELECT * FROM products';
 
 
-//         const date = new Date();
+        const date = new Date();
        
 
            
             
-//         mysqlConnection.query(mQuery, (error, rows, fields) => {
+        mysqlConnection.query(mQuery, (error, rows, fields) => {
 
-//             const products = [];
-//             rows.forEach(element => {
-//                 element.prices = [
-//                     {
-//                         "value": element["priceCarton"],
-//                         "currency": "USD",
-//                         "unit": "Carton"
-//                     },
-//                     {
-//                         "value": element["priceDozen"],
-//                         "currency": "USD",
-//                         "unit": "Dozen"
-//                     }
-//                 ];
-//                 products.push(element);
-//             });
+            const products = [];
+            rows.forEach(element => {
+                element.prices = [
+                    {
+                        "value": element["priceCarton"],
+                        "currency": "USD",
+                        "unit": "Carton"
+                    },
+                    {
+                        "value": element["priceDozen"],
+                        "currency": "USD",
+                        "unit": "Dozen"
+                    }
+                ];
+                products.push(element);
+            });
             
-//             if (!error)
+            if (!error)
 
 
-//             res.status(200).json({
-//                 success: true,
-//                 contentData: products
-//             });
+            res.status(200).json({
+                success: true,
+                contentData: products
+            });
             
             
 
-//             else
-//             //console.log(err.sqlMessage);
+            else
+            //console.log(err.sqlMessage);
 
-//             res.status(404).json({
-//                 success: false,
-//                 message: error.sqlMessage
-//             });
-//             })
+            res.status(404).json({
+                success: false,
+                message: error.sqlMessage
+            });
+            })
 
 
        
-//     }catch(err){
+    }catch(err){
 
-//         res.status(404).json({
-//             success: false,
-//             message: err
-//         });
-//     }
+        res.status(404).json({
+            success: false,
+            message: err
+        });
+    }
 }
 
 const getProduct = async(req, res) => {
