@@ -19,10 +19,7 @@ var storage = multer.diskStorage({
   var upload = multer({ storage: storage })
 
  
-  router.get('/', (req, res) => {
-       res.send("Hello from shopia!We are live now from route!!!");
-    });
-//router.get('/', productActions.getAllProducts);
+router.get('/', productActions.getAllProducts);
 router.get('/:uID', productActions.getProduct);
 router.post('/add',  upload.array('myFiles'), productActions.addProduct);
 router.post('/suggest', productActions.suggestProduct);
