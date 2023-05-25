@@ -257,9 +257,6 @@ const ProspectiveSuppliers = require('../../models/ProspectiveSuppliers.js');
 const router = express.Router();
 
 const getAllProducts = async(req, res) => {
-//         console.log("received data");
-
-//          res.send("Hello from shopia!We are live now!!!");
 
     try{
        
