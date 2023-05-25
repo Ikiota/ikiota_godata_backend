@@ -248,7 +248,7 @@ app.use(express.json())
 app.use(bodyParser.json());
 
 
-//const Products = require('../../models/Product.js');
+const Products = require('../../models/Product.js');
 const { string } = require('@hapi/joi');
 const ProspectiveSuppliers = require('../../models/ProspectiveSuppliers.js');
 
