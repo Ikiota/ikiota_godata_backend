@@ -268,6 +268,11 @@ const getAllProducts = async(req, res) => {
         const date = new Date();
        
 
+            res.status(200).json({
+                success: true,
+                contentData: "data received"
+            });
+            
         mysqlConnection.query(mQuery, (error, rows, fields) => {
 
             const products = [];
