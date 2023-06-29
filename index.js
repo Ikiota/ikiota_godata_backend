@@ -1,7 +1,7 @@
 const mysqlConnection = require('./db');
 const Express = require('express');
 const cors = require('cors');
-const mongoose = require("mongoose");
+//const mongoose = require("mongoose");
 
 
 const adminsRouter = require("./routes/admins")
@@ -11,7 +11,6 @@ const vendorsRouter  = require("./routes/vendors")
 const productsRouter  = require("./routes/products")
 const addressesRouter  = require("./routes/addresses")
 const categoriesRouter  = require("./routes/categories")
-const subCategoriesRouter  = require("./routes/subCategories")
 const suppliersRouter  = require("./routes/suppliers")
 const brandsRouter  = require("./routes/brands")
 const storesRouter  = require("./routes/stores")
@@ -67,7 +66,7 @@ const socketio = require('socket.io')(http);
    
 
 //app.use('/uploads', Express.static(__dirname +'/uploads'));
-app.use('/api/uploads', Express.static('uploads'));
+app.use('api/uploads', Express.static('uploads'));
    
 //app.use(Express.static('uploads'));
 
@@ -75,6 +74,10 @@ app.use('/api/uploads', Express.static('uploads'));
     app.get("/api/", (req, res) => {
        res.send("Hello from shopia!We are live now!!!");
     });
+    // app.get("/", (req, res) => {
+    //     res.send("Hello from shopia!We are live now!!!");
+    //  });
+ 
 
    
     
@@ -89,7 +92,6 @@ app.use('/api/uploads', Express.static('uploads'));
     app.use('/api/products', productsRouter);
     app.use('/api/addresses', addressesRouter);    
     app.use('/api/categories', categoriesRouter);
-    app.use('/api/subCategories', subCategoriesRouter);
     app.use('/api/orders', ordersRouter);
     app.use('/api/brands', brandsRouter);
     app.use('/api/suppliers', suppliersRouter);
@@ -99,7 +101,7 @@ app.use('/api/uploads', Express.static('uploads'));
 
 
 
-    const port =  process.env.PORT || 900;
+    const port =  process.env.PORT || 3000;
 
 
 
@@ -113,6 +115,7 @@ app.use('/api/uploads', Express.static('uploads'));
         userSocket.on("add_order", (data) => {
             
             clients[data.clientID] = userSocket;
+            console.log(data, 'Has received new order!');
             userSocket.broadcast.emit("receive_order", data)
         });
         userSocket.on("change_location", (data) => {

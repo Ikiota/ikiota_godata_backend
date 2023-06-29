@@ -13,22 +13,22 @@ const mysql = require('mysql');
 
 
    
-// var mysqlConnection = mysql.createConnection({
-//     host: '127.0.0.1',
-//     user: 'root',
-//     password: '',
-//     database: 'nunuapp',
-//     multipleStatements: true
-//     });
+var mysqlConnection = mysql.createConnection({
+    host: '127.0.0.1',
+    user: 'root',
+    password: '',
+    database: 'nunuapp',
+    multipleStatements: true
+    });
 
-    var mysqlConnection = mysql.createConnection({
-        host: '127.0.0.1',
-        user: 'admin',
-        password: 'p@55Admin',
-        database: 'shopiadatabase',
-        port: 3306,
-        multipleStatements: true
-        });
+    // var mysqlConnection = mysql.createConnection({
+    //     host: '127.0.0.1',
+    //     user: 'admin',
+    //     password: 'p@55Admin',
+    //     database: 'shopiadatabase',
+    //     port: 3306,
+    //     multipleStatements: true
+    //     });
     mysqlConnection.connect((err)=> {
         if(!err)
         console.log('Connection Established Successfully');
