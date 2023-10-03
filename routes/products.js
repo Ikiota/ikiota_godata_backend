@@ -22,7 +22,6 @@ var storage = multer.diskStorage({
 router.get('/', productActions.getAllProducts);
 router.get('/:uID', productActions.getProduct);
 router.post('/add',  upload.array('myFiles'), productActions.addProduct);
-router.post('/suggest', productActions.suggestProduct);
 router.patch('/update/:uID', productActions.updateProduct);
 router.delete('/:uID', productActions.deleteProduct);
 

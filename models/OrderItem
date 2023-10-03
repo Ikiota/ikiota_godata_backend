@@ -1,9 +1,0 @@
-//Order object create
-var OrderItem = function(order){
-    this.orderId         = order.orderId;
-    this.item            = order.item;
-    this.quantity        = order.quantity;
-    this.dateCreated     = order.dateCreated ?? new Date();
-    
-  };
-module.exports = OrderItem;

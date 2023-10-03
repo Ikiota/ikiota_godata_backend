@@ -5,18 +5,10 @@ const cors = require('cors');
 
 
 const adminsRouter = require("./routes/admins")
-const buyersRouter  = require("./routes/buyers")
-const driversRouter  = require("./routes/drivers")
-const vendorsRouter  = require("./routes/vendors")
+const clientsRouter  = require("./routes/clients")
+const companiesRouter  = require("./routes/companies")
 const productsRouter  = require("./routes/products")
-const addressesRouter  = require("./routes/addresses")
-const categoriesRouter  = require("./routes/categories")
-const suppliersRouter  = require("./routes/suppliers")
-const brandsRouter  = require("./routes/brands")
-const storesRouter  = require("./routes/stores")
-const ordersRouter  = require("./routes/orders")
-const adsRouter  = require("./routes/ads")
-const messagesRouter  = require("./routes/messages")
+
 const multer = require('multer')
 
 
@@ -65,18 +57,18 @@ const socketio = require('socket.io')(http);
    
    
 
-//app.use('/uploads', Express.static(__dirname +'/uploads'));
-app.use('api/uploads', Express.static('uploads'));
+app.use('/uploads', Express.static(__dirname +'/uploads'));
+//app.use('api/uploads', Express.static('uploads'));
    
 //app.use(Express.static('uploads'));
 
 
-    app.get("/api/", (req, res) => {
-       res.send("Hello from shopia!We are live now!!!");
-    });
-    // app.get("/", (req, res) => {
-    //     res.send("Hello from shopia!We are live now!!!");
-    //  });
+    // app.get("/api/", (req, res) => {
+    //    res.send("Hello from ikiota!We are live now!!!");
+    // });
+    app.get("/", (req, res) => {
+        res.send("Hello from ikiota!We are live now!!!");
+     });
  
 
    
@@ -85,19 +77,11 @@ app.use('api/uploads', Express.static('uploads'));
 
 
 
-    app.use('/api/admins', adminsRouter);
-    app.use('/api/buyers', buyersRouter);
-    app.use('/api/drivers', driversRouter);
-    app.use('/api/vendors', vendorsRouter);
-    app.use('/api/products', productsRouter);
-    app.use('/api/addresses', addressesRouter);    
-    app.use('/api/categories', categoriesRouter);
-    app.use('/api/orders', ordersRouter);
-    app.use('/api/brands', brandsRouter);
-    app.use('/api/suppliers', suppliersRouter);
-    app.use('/api/stores', storesRouter);
-    app.use('/api/ads', adsRouter);
-    app.use('/api/messages', messagesRouter);
+    app.use('/admins', adminsRouter);
+    app.use('/clients', clientsRouter);
+    app.use('/companies', companiesRouter);
+    app.use('/products', productsRouter);
+    
 
 
 
@@ -112,26 +96,7 @@ app.use('api/uploads', Express.static('uploads'));
 
         console.log('Server started with socket io');
         // console.log(userSocket.id, 'Has joined');
-        userSocket.on("add_order", (data) => {
-            
-            clients[data.clientID] = userSocket;
-            console.log(data, 'Has received new order!');
-            userSocket.broadcast.emit("receive_order", data)
-        });
-        userSocket.on("change_location", (data) => {
-            
-            userSocket.broadcast.emit(`live_location_${data.userID}`, data);
-        });
-        userSocket.on("edit_order", (data) => {
-
-            let targetId = data.clientID;
-
-            clients[targetId] = userSocket;
-            userSocket.broadcast.emit("on_edit", data);
-            if (clients[targetId]) clients[targetId].emit("edited_order", data);
-
-    
-        });
+        
     })
 
 
