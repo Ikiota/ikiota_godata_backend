@@ -13,6 +13,7 @@ var Product = function(product){
     this.warranty                   = product.warranty;
     this.provider                   = product.provider;
     this.cover                      = product.cover;
+    this.logo                       = product.logo;
     this.status                     = product.status ?? "active";
     this.dateCreated                = product.dateCreated ?? new Date();
     

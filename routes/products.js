@@ -11,9 +11,17 @@ var storage = multer.diskStorage({
     destination: function (req, file, cb) {
       cb(null, 'uploads')
     },
+
+  
     filename: function (req, file, cb) {
-      cb(null, new Date().toISOString().replace(/:/g, '-')+"-"+file.originalname)
+      cb(null, file.originalname)
     }
+
+
+
+    // filename: function (req, file, cb) {
+    //   cb(null, new Date().toISOString().replace(/:/g, '-')+"-"+file.originalname)
+    // }
   })
    
   var upload = multer({ storage: storage })
@@ -22,7 +30,7 @@ var storage = multer.diskStorage({
 router.get('/', productActions.getAllProducts);
 router.get('/:uID', productActions.getProduct);
 router.post('/add',  upload.array('myFiles'), productActions.addProduct);
-router.patch('/update/:uID', productActions.updateProduct);
+router.patch('/update/:uID', upload.array('myFiles'), productActions.updateProduct);
 router.delete('/:uID', productActions.deleteProduct);
 
 module.exports = router;

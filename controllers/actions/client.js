@@ -4,9 +4,6 @@ const mysqlConnection = require('../../db');
 const express = require('express');
 const mongoose = require('mongoose');
 const bodyParser = require('body-parser');
-const bcrypt = require('bcrypt');
-//const {registerValidation, loginValidation} = require('../validations/user');
-
 const jwt = require('jsonwebtoken');
 
 
@@ -115,11 +112,10 @@ const getClient = async(req, res) => {
 
 const createClient = async (req, res) => {
    
-    //hash password
-    const salt = bcrypt.genSaltSync(10);
-
+   
     
-    const hashedPassword = await bcrypt.hash(req.body.password, salt);
+    //const hashedPassword = await bcrypt.hash(req.body.password, salt);
+    const hashedPassword = req.body.password;
 
 
     let bodyData =  req.body;
@@ -127,13 +123,13 @@ const createClient = async (req, res) => {
     const newClient = new Clients({
 
 
-            firstName: bodyData.firstName,
-            otherNames: bodyData.otherNames,
+            name: bodyData.name,
             email: bodyData.email,
             phone: bodyData.phone,
             password: hashedPassword,
             profile: bodyData.profile,
-            sponsor: bodyData.sponsor,
+            company: bodyData.company,
+            location: bodyData.location,
             status: bodyData.status,
             dateCreated: bodyData.dateCreated
         });
@@ -246,7 +242,7 @@ const loginClient = async (req, res) => {
                     const client =  rows[0];
 
                     
-                    const validPass = await bcrypt.compare(bodyData.password, client.password);
+                    const validPass = bodyData.password === client.password;
                     if(!validPass) return res.status(400).json({
                         success: false,
                         message: 'Invalid password'});
@@ -298,15 +294,15 @@ const updateClient = async (req, res) => {
     
     const newClient = new Clients({
 
-            firstName: bodyData.firstName,
-            otherNames: bodyData.otherNames,
-            email: bodyData.email,
-            phone: bodyData.phone,
-            password: bodyData.password,
-            profile: mProfile,
-            sponsor: bodyData.sponsor,
-            status: bodyData.status,
-            dateCreated: bodyData.dateCreated
+        name: bodyData.name,
+        email: bodyData.email,
+        phone: bodyData.phone,
+        password: hashedPassword,
+        profile: bodyData.profile,
+        company: bodyData.company,
+        location: bodyData.location,
+        status: bodyData.status,
+        dateCreated: bodyData.dateCreated
     });
     
     try{

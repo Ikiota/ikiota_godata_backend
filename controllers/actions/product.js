@@ -28,7 +28,7 @@ const getAllProducts = async(req, res) => {
        
 
 
-        const mQuery = 'SELECT * FROM products';
+        const mQuery = 'SELECT * FROM products ORDER BY id DESC';
 
 
         const date = new Date();
@@ -117,14 +117,13 @@ const getProduct = async(req, res) => {
 
 const addProduct = async (req, res) => {
    
-    //hash password
-    const salt = bcrypt.genSaltSync(10);
-
+   
     
-    const hashedPassword = await bcrypt.hash(req.body.password, salt);
+   
 
 
-    let bodyData =  req.body;
+    let bodyData =  JSON.parse(req.body.bodyData);
+
     
     const newProduct = new Products({
 
@@ -132,21 +131,22 @@ const addProduct = async (req, res) => {
             description                : bodyData.description,
             type                       : bodyData.type,
             sector                     : bodyData.sector,
-            valueMin                   : bodyData.minValue,
-            valueMax                   : bodyData.maxValue,
+            valueMin                   : bodyData.valueMin,
+            valueMax                   : bodyData.valueMax,
             maturity                   : bodyData.maturity,
             warranty                   : bodyData.warranty,
             provider                   : bodyData.provider,
             cover                      : bodyData.cover,
+            logo                       : bodyData.logo,
             status                     : bodyData.status ?? "active",
             dateCreated                : bodyData.dateCreated ?? new Date(),
         });
     
     try{
+        console.log(newProduct);
 
         const mQuerySelect = 'SELECT * FROM products WHERE name = ?';
-       
-
+        
         mysqlConnection.query(mQuerySelect,[bodyData.name], (error, rows, fields) => {
             
             if (!error){
@@ -156,15 +156,17 @@ const addProduct = async (req, res) => {
 
                     res.status(404).json({
                         success: false,
-                        message: "An account has already been created with this name!"
+                        message: "A product has already been created with this name!"
                     });
 
                    
                 }else{
+                   
 
                     const mQuery = 'INSERT INTO products SET?';
                     mysqlConnection.query(mQuery, newProduct, (error, rows, fields) => {
-                        
+                       
+
                         if (!error){
             
             
@@ -229,12 +231,6 @@ const updateProduct = async (req, res) => {
     const uID = req.params.uID;
     
     let bodyData =  JSON.parse(req.body.bodyData);
-    const files = req.files;
-    let mProfile = bodyData.profile;
-    if (files || files.length != 0){
-        let mFiles = files.map(element => element.path.replace("\\", "/")); 
-        mProfile = mFiles[0];
-    }
 
     
     const newProduct = new Products({
@@ -249,6 +245,7 @@ const updateProduct = async (req, res) => {
         warranty                   : bodyData.warranty,
         provider                   : bodyData.provider,
         cover                      : bodyData.cover,
+        logo                       : bodyData.logo,
         status                     : bodyData.status ?? "active",
         dateCreated                : bodyData.dateCreated ?? new Date(),
     });

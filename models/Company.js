@@ -4,6 +4,7 @@ var Company = function(company){
     this.raisonSociale                          = company.raisonSociale;
     this.sigle                                  = company.sigle;
     this.formeJuridique                         = company.formeJuridique;
+    this.logo                                   = company.logo;
     this.statutsOrganigramme                    = company.statutsOrganigramme;
     this.dateCreation                           = company.dateCreation;
     this.dateDebutTravaux                       = company.dateDebutTravaux;
@@ -46,6 +47,8 @@ var Company = function(company){
     this.detailsFaillite                        = company.detailsFaillite;
     this.detailsPoursuitesJudiciaires           = company.detailsPoursuitesJudiciaires;
     this.detailsAntecedentsFiscales             = company.detailsAntecedentsFiscales;
+    this.user                                   = company.user;
+    this.status                                 = company.status;
     
     
   };

@@ -1,260 +1,7 @@
-// const express = require('express');
-// const mongoose = require('mongoose');
-// const bodyParser = require('body-parser');
-// const bcrypt = require('bcrypt');
-// const {registerValidation, loginValidation} = require('../validations/buyer');
-
-// const jwt = require('jsonwebtoken');
-
-
-// const app = express();
-
-// app.use(express.json())
-
-
-// ////app.use(bodyParser.urlencoded({ extended: false }));
-// app.use(bodyParser.json());
-
-
-// const Buyers = require('../../models/Buyer.js');
-// const { string } = require('@hapi/joi');
-
-
-
-
-// const router = express.Router();
-
-// const getAllBuyers = async(req, res) => {
-
-//     try{
-//         const buyers = await Buyers.find();
-
-//         res.status(200).json({
-//             success: true,
-//             message: buyers._id,
-//             contentData: buyers
-//         });
-//     }catch(error){
-
-//         res.status(404).json({
-//             success: false,
-//             message: error.message
-//         });
-//     }
-// }
-
-// const getBuyer = async(req, res) => {
-//     const uID = req.params.uID;
-//     try{
-
-        
-       
-//         const buyer = await Buyers.findById({
-//             _id: uID
-//         });
-//         if(!buyer){
-//             res.status(404).json({
-//                 success: false,
-//                 message: "Buyer not found",
-//                 contentData: buyer
-//             });
-           
-//         }else  res.status(200).json({
-//             success: true,
-//             message: buyer["_id"],
-//             contentData: buyer
-//         });
-        
-
-//     }catch(error){
-
-//         res.status(404).json({
-//             success: false,
-//             message: error.message
-//         });
-
-//     }
-
-// }
-
-// const createBuyer = async (req, res) => {
-    
-
-//     //validate data before using it
-//     // const {error} = registerValidation(req.body);
-//     // if(error) return res.status(400).json({
-//     //     success: false,
-//     //     message: error.details[0].message
-//     // });
-
-
-//     //check if account already exists to avoid data duplication
-//     const phoneExist = await Buyers.findOne({phone: req.body.phone});
-//     if(phoneExist) return res.status(400).json({
-//         success: false,
-//         message: 'Phone number already exists'
-//     });
-
-//     //hash password
-//     const salt = bcrypt.genSaltSync(10);
-
-    
-//     const hashedPassword = await bcrypt.hash(req.body.password, salt);
-
-
-
-    
-//     const newBuyer = new Buyers({
-
-//         firstName: req.body.firstName,
-//         otherNames: req.body.otherNames,
-//         storeName: req.body.storeName,
-//         address: req.body.address,
-//         profileImg: req.body.profileImg,
-//         phone: req.body.phone,
-//         email: req.body.email,
-//         password: hashedPassword,
-//         status: req.body.status,
-//         dateCreated: req.body.dateCreated
-//     });
-
-//     try{
-//         await newBuyer.save();
-//         res.status(201).json({
-//             success: true,
-//             message: "Buyer added!",
-//             contentData: newBuyer
-//         });
-
-//     }catch(error){
-//         res.status(400).json({
-//             success: false,
-//             message: error.message
-//         });
-//     }
-// }
-
-
-// const loginBuyer = async (req, res) => {
-
-//     //validate data before using it
-//     // const {error} = loginValidation(req.body);
-//     // if(error) return res.status(400).json({
-//     //     success: false,
-//     //     message: error.details[0].message
-//     // });
-
-
-//     //check if account already exists to avoid data duplication
-//     const buyer = await Buyers.findOne({phone: req.body.phone});
-//     if(!buyer) return res.status(400).json({
-//         success: false,
-//         message: 'Incorect phone or password'});
-
-//     //check if password is correct
-    
-//     const validPass = await bcrypt.compare(req.body.password, buyer.password);
-
-//     if(!validPass) return res.status(400).json({
-//         success: false,
-//         message: 'Invalid password'});
-
-
-//         const token = jwt.sign({_id: buyer._id}, process.env.TOKEN_SECRET);
-
-//         res.header('auth-token', token).json(
-//         { 
-//             success: true,
-//             message: buyer._id,
-//             authToken: token,
-//             contentData: buyer
-
-//         });
-
-    
-// }
-
-
-// const updateBuyer = async (req, res) => {
-
-//     const uID = req.params.uID;
-
-//     try{
-
-       
-//         await Buyers.findByIdAndUpdate(
-//             {
-//                 _id: uID
-//             },
-//             req.body
-           
-            
-//         )
-
-//         res.status(202).json({
-//             success: true,
-//             message: uID,
-//             });
-
-//     }catch (error){
-
-//         res.status(401).json({
-//             success: false,
-//             message: error.message
-//         });
-//     }
-// }
-
-
-// const deleteBuyer = async (req, res) => {
-
-//     const uID = req.params.uID;
-//     try{
-//         await Buyers.findByIdAndRemove({
-//             _id: uID
-//         });
-//         res.status(203).json({
-//             success: true,
-//             message: uID
-//             });
-
-//     }catch(error){
-//         res.status(402).json({
-//             success: false,
-//             message: error.message});
-//     }
-// }
-
-
-// module.exports.getAllBuyers = getAllBuyers;
-// module.exports.createBuyer = createBuyer;
-// module.exports.loginBuyer = loginBuyer;
-// module.exports.getBuyer = getBuyer;
-// module.exports.updateBuyer = updateBuyer;
-// module.exports.deleteBuyer = deleteBuyer;
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 const mysqlConnection = require('../../db');
 const express = require('express');
-const mongoose = require('mongoose');
 const bodyParser = require('body-parser');
-const bcrypt = require('bcrypt');
-//const {registerValidation, loginValidation} = require('../validations/user');
 
 const jwt = require('jsonwebtoken');
 
@@ -264,7 +11,6 @@ const app = express();
 app.use(express.json())
 
 
-////app.use(bodyParser.urlencoded({ extended: false }));
 app.use(bodyParser.json());
 
 
@@ -365,20 +111,8 @@ const getAdmin = async(req, res) => {
 const createAdmin = async (req, res) => {
     
 
-    //validate data before using it
-    // const {error} = registerValidation(req.body);
-    // if(error) return res.status(400).json({
-    //     success: false,
-    //     message: error.details[0].message
-    // });
-
-
-   
-    //hash password
-    const salt = bcrypt.genSaltSync(10);
-
-    
-    const hashedPassword = await bcrypt.hash(req.body.password, salt);
+ 
+    const hashedPassword = req.body.password;
 
 
     let bodyData =  req.body;
@@ -406,7 +140,7 @@ const createAdmin = async (req, res) => {
         mysqlConnection.query(mQuerySelect,[bodyData.phone], (error, rows, fields) => {
             
             if (!error){
-                console.log(`==========>User ${rows}`);
+                
 
                 if(rows[0]){
 
@@ -482,12 +216,7 @@ const createAdmin = async (req, res) => {
 
 const loginAdmin = async (req, res) => {
 
-    //validate data before using it
-    // const {error} = loginValidation(req.body);
-    // if(error) return res.status(400).json({
-    //     success: false,
-    //     message: error.details[0].message
-    // });
+    
 
 
     const bodyData = req.body;
@@ -495,19 +224,21 @@ const loginAdmin = async (req, res) => {
 
     try{
 
-        const mQuerySelect = 'SELECT * FROM admins WHERE phone = ?';
+        const mQuerySelect = 'SELECT * FROM admins WHERE email = ?';
        
         
-        mysqlConnection.query(mQuerySelect,[bodyData.phone], async (error, rows, fields) => {
+        mysqlConnection.query(mQuerySelect,[bodyData.email], async (error, rows, fields) => {
             
             if (!error)
                 if(rows[0]){
 
                     const admin =  rows[0];
 
+                    console.log(bodyData.password);
+                    console.log(admin.password);
                    
-                    const validPass = await bcrypt.compare(bodyData.password, admin.password);
-                    if(!validPass) return res.status(400).json({
+                    const validPass = bodyData.password == admin.password;
+                    if(bodyData.password != admin.password) return res.status(400).json({
                         success: false,
                         message: 'Invalid password'});
                 

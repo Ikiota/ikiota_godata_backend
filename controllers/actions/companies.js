@@ -4,8 +4,6 @@ const mysqlConnection = require('../../db');
 const express = require('express');
 const mongoose = require('mongoose');
 const bodyParser = require('body-parser');
-const bcrypt = require('bcrypt');
-//const {registerValidation, loginValidation} = require('../validations/user');
 
 const jwt = require('jsonwebtoken');
 
@@ -115,8 +113,7 @@ const getCompany = async(req, res) => {
 
 const registerCompany = async (req, res) => {
    
-    //hash password
-    const salt = bcrypt.genSaltSync(10);
+    
 
     let bodyData =  JSON.parse(req.body.bodyData);
 
@@ -132,6 +129,7 @@ const registerCompany = async (req, res) => {
     raisonSociale                          : bodyData.raisonSociale,
     sigle                                  : bodyData.sigle,
     formeJuridique                         : bodyData.formeJuridique,
+    logo                                   : bodyData.logo,
     statutsOrganigramme                    : bodyData.statutsOrganigramme,
     dateCreation                           : bodyData.dateCreation,
     tdateDebutTravaux                      : bodyData.dateDebutTravaux,
@@ -175,11 +173,12 @@ const registerCompany = async (req, res) => {
     detailsPoursuitesJudiciaires           : bodyData.detailsPoursuitesJudiciaires,
     detailsAntecedentsFiscales             : bodyData.detailsAntecedentsFiscales,
     user                                   : bodyData.user,
+    status                                 : bodyData.status,
     
         });
     
     try{
-        console.log("======== 11111");
+        
 
         const mQuerySelect = 'SELECT * FROM companies WHERE raisonSociale = ?';
        
@@ -218,9 +217,7 @@ const registerCompany = async (req, res) => {
                             
                             mysqlConnection.query(mQuery,[uID], (error, rows, fields) => {
                                 
-                                console.log("======== returned company");
-                        console.log(rows);
-
+                                
 
                                 if (!error)
                                     if(!rows)
@@ -272,13 +269,7 @@ const registerCompany = async (req, res) => {
 
 const loginCompany = async (req, res) => {
 
-    //validate data before using it
-    // const {error} = loginValidation(req.body);
-    // if(error) return res.status(400).json({
-    //     success: false,
-    //     message: error.details[0].message
-    // });
-
+    
 
     const bodyData = req.body;
     
@@ -296,7 +287,7 @@ const loginCompany = async (req, res) => {
                     const company =  rows[0];
 
                     
-                    const validPass = await bcrypt.compare(bodyData.password, company.password);
+                    const validPass =bodyData.password === company.password;
                     if(!validPass) return res.status(400).json({
                         success: false,
                         message: 'Invalid password'});
@@ -337,13 +328,8 @@ const updateCompany = async (req, res) => {
 
     const uID = req.params.uID;
     
-    const salt = bcrypt.genSaltSync(10);
-
-    let bodyData =  JSON.parse(req.body.bodyData);
-
-
    
-    
+    let bodyData =  JSON.parse(req.body.bodyData);
 
     const mCompany = new Companies({
 
@@ -354,6 +340,7 @@ const updateCompany = async (req, res) => {
     sigle                                  : bodyData.sigle,
     formeJuridique                         : bodyData.formeJuridique,
     statutsOrganigramme                    : bodyData.statutsOrganigramme,
+    logo                                   : bodyData.logo,
     dateCreation                           : bodyData.dateCreation,
     tdateDebutTravaux                      : bodyData.dateDebutTravaux,
     dateAutorisation                       : bodyData.dateAutorisation,
@@ -396,6 +383,7 @@ const updateCompany = async (req, res) => {
     detailsPoursuitesJudiciaires           : bodyData.detailsPoursuitesJudiciaires,
     detailsAntecedentsFiscales             : bodyData.detailsAntecedentsFiscales,
     user                                   : bodyData.user,
+    status                                 : bodyData.status,
     
         });
     
@@ -404,6 +392,8 @@ const updateCompany = async (req, res) => {
         const mQuery = 'UPDATE companies SET? WHERE id =?';
         mysqlConnection.query(mQuery, [mCompany, uID], (error, rows, fields) => {
             
+
+
             if (!error){
 
 
@@ -412,7 +402,7 @@ const updateCompany = async (req, res) => {
         
                 mysqlConnection.query(mQuerySelect,[uID], async (error, rows, fields) => {
                     
-                    if (!error)
+                    if (!error){
                         if(rows[0]){
                             const company =  rows[0];
                             res.status(200).json({
@@ -426,7 +416,17 @@ const updateCompany = async (req, res) => {
                                 success: false,
                                 message: 'Company not found'});
                         }
+                    }else{
+                        console.log(error);
+
+                        return res.status(400).json({
+                            success: false,
+                            message:error
+                        });
+                    }
+                        
                     })
+                    
 
 
 
