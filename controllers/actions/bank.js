@@ -16,20 +16,19 @@ app.use(express.json())
 app.use(bodyParser.json());
 
 
-const Products = require('../../models/Product.js');
+const Banks = require('../../models/Bank.js');
 const { string } = require('@hapi/joi');
-const { result } = require('@hapi/joi/lib/base');
 
 
 const router = express.Router();
 
-const getAllProducts = async(req, res) => {
+const getAllBanks = async(req, res) => {
 
     try{
        
 
 
-        const mQuery = 'SELECT * FROM products ORDER BY id DESC';
+        const mQuery = 'SELECT * FROM banks ORDER BY id DESC';
 
 
         const date = new Date();
@@ -37,76 +36,20 @@ const getAllProducts = async(req, res) => {
 
            
             
-         mysqlConnection.query(mQuery, async(error, rows, fields) => {
-
+        mysqlConnection.query(mQuery, (error, rows, fields) => {
 
             
-             if (!error){
-
-            //     const products = [];
-            //     console.log("===========11");
-
-            //     for(element in rows){
-            //         const mQuery = 'SELECT * FROM banks WHERE id = ?';
-    
-            //         console.log("===========222");
-            //                result = mysqlConnection.query(mQuery,[element.provider], (error, rows, fields) => {
-            //             console.log("===========333");
-                       
-            //             if (!error){
-    
-            //                 if(!rows){
-            //                     res.status(404).json({
-            //                         success: false,
-            //                         message: "Product's provider not found"
-            //                     });
-            //                 }
-            //                 else {
-                                
-            //                     console.log("===========44");
-            //                     element.provider = rows[0];
-                                
-            //                     console.log("===========5555");
-            //                      products.push(element);
-
-            //                      return element;
-    
-            //                 }   
-            //             }
-                           
-            //             else{
-            //                 res.status(404).json({
-            //                     success: false,
-            //                     message: error.sqlMessage
-            //                 });
-            //             }
-            //             //console.log(err.sqlMessage);
             
-                       
-            //             },);
-                        
-                            
-                       
-                       
-                    
-            //     }
-                
-
-            //        result = new Promise((resolve, reject) => {
-            //         console.log("===========777");
-            //     console.log(products);
-            //});
-                
-                
+            if (!error)
 
 
             res.status(200).json({
                 success: true,
                 contentData: rows
             });
-                
-                
-            }
+            
+            
+
             else
             //console.log(err.sqlMessage);
 
@@ -127,14 +70,14 @@ const getAllProducts = async(req, res) => {
     }
 }
 
-const getProduct = async(req, res) => {
+const getBank = async(req, res) => {
     const uID = req.params.uID;
     
     try{
        
 
 
-        const mQuery = 'SELECT * FROM products WHERE id = ?';
+        const mQuery = 'SELECT * FROM banks WHERE id = ?';
        
 
         mysqlConnection.query(mQuery,[uID], (error, rows, fields) => {
@@ -143,7 +86,7 @@ const getProduct = async(req, res) => {
                 if(!rows)
                     res.status(404).json({
                         success: false,
-                        message: "Product not found"
+                        message: "Bank not found"
                     });
                 else     
                     res.status(200).json({
@@ -172,7 +115,7 @@ const getProduct = async(req, res) => {
 
 }
 
-const addProduct = async (req, res) => {
+const addBank = async (req, res) => {
    
    
     
@@ -182,7 +125,7 @@ const addProduct = async (req, res) => {
     let bodyData =  JSON.parse(req.body.bodyData);
 
     
-    const newProduct = new Products({
+    const newBank = new Banks({
 
             name                       : bodyData.name,
             description                : bodyData.description,
@@ -200,9 +143,9 @@ const addProduct = async (req, res) => {
         });
     
     try{
-        console.log(newProduct);
+        console.log(newBank);
 
-        const mQuerySelect = 'SELECT * FROM products WHERE name = ?';
+        const mQuerySelect = 'SELECT * FROM banks WHERE name = ?';
         
         mysqlConnection.query(mQuerySelect,[bodyData.name], (error, rows, fields) => {
             
@@ -213,15 +156,15 @@ const addProduct = async (req, res) => {
 
                     res.status(404).json({
                         success: false,
-                        message: "A product has already been created with this name!"
+                        message: "A bank has already been created with this name!"
                     });
 
                    
                 }else{
                    
 
-                    const mQuery = 'INSERT INTO products SET?';
-                    mysqlConnection.query(mQuery, newProduct, (error, rows, fields) => {
+                    const mQuery = 'INSERT INTO banks SET?';
+                    mysqlConnection.query(mQuery, newBank, (error, rows, fields) => {
                        
 
                         if (!error){
@@ -230,7 +173,7 @@ const addProduct = async (req, res) => {
                           
                             const uID = rows.insertId;
 
-                            const mQuery = 'SELECT * FROM products WHERE id = ?';
+                            const mQuery = 'SELECT * FROM banks WHERE id = ?';
        
 
                             mysqlConnection.query(mQuery,[uID], (error, rows, fields) => {
@@ -239,7 +182,7 @@ const addProduct = async (req, res) => {
                                     if(!rows)
                                         res.status(404).json({
                                             success: false,
-                                            message: "Product not found"
+                                            message: "Bank not found"
                                         });
                                     else     
                                         res.status(200).json({
@@ -283,14 +226,14 @@ const addProduct = async (req, res) => {
 }
 
 
-const updateProduct = async (req, res) => {
+const updateBank = async (req, res) => {
 
     const uID = req.params.uID;
     
     let bodyData =  JSON.parse(req.body.bodyData);
 
     
-    const newProduct = new Products({
+    const newBank = new Banks({
 
         name                       : bodyData.name,
         description                : bodyData.description,
@@ -309,30 +252,30 @@ const updateProduct = async (req, res) => {
     
     try{
 
-        const mQuery = 'UPDATE products SET? WHERE id =?';
-        mysqlConnection.query(mQuery, [newProduct, uID], (error, rows, fields) => {
+        const mQuery = 'UPDATE banks SET? WHERE id =?';
+        mysqlConnection.query(mQuery, [newBank, uID], (error, rows, fields) => {
             
             if (!error){
 
 
-                const mQuerySelect = 'SELECT * FROM products WHERE id = ?';
+                const mQuerySelect = 'SELECT * FROM banks WHERE id = ?';
        
         
                 mysqlConnection.query(mQuerySelect,[uID], async (error, rows, fields) => {
                     
                     if (!error)
                         if(rows[0]){
-                            const product =  rows[0];
+                            const bank =  rows[0];
                             res.status(200).json({
                                 success: true,
-                                contentData: product
+                                contentData: bank
                             });
                            
                         }else{
         
                             return res.status(400).json({
                                 success: false,
-                                message: 'Product not found'});
+                                message: 'Bank not found'});
                         }
                     })
 
@@ -360,14 +303,14 @@ const updateProduct = async (req, res) => {
 }
 
 
-const deleteProduct = async (req, res) => {
+const deleteBank = async (req, res) => {
 
     const uID = req.params.uID;
 
     
     try{
 
-        const mQuery = 'DELETE FROM products WHERE id = ?';
+        const mQuery = 'DELETE FROM banks WHERE id = ?';
         mysqlConnection.query(mQuery, [uID], (error, rows, fields) => {
             
             if (!error){
@@ -400,8 +343,8 @@ const deleteProduct = async (req, res) => {
 }
 
 
-module.exports.getAllProducts = getAllProducts;
-module.exports.addProduct = addProduct;
-module.exports.getProduct = getProduct;
-module.exports.updateProduct = updateProduct;
-module.exports.deleteProduct = deleteProduct;
+module.exports.getAllBanks = getAllBanks;
+module.exports.addBank = addBank;
+module.exports.getBank = getBank;
+module.exports.updateBank = updateBank;
+module.exports.deleteBank = deleteBank;
