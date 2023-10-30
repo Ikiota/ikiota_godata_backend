@@ -127,16 +127,12 @@ const addBank = async (req, res) => {
     
     const newBank = new Banks({
 
+       
+
             name                       : bodyData.name,
             description                : bodyData.description,
             type                       : bodyData.type,
-            sector                     : bodyData.sector,
-            valueMin                   : bodyData.valueMin,
-            valueMax                   : bodyData.valueMax,
-            maturity                   : bodyData.maturity,
-            warranty                   : bodyData.warranty,
-            provider                   : bodyData.provider,
-            cover                      : bodyData.cover,
+            creator                    : bodyData.creator,
             logo                       : bodyData.logo,
             status                     : bodyData.status ?? "active",
             dateCreated                : bodyData.dateCreated ?? new Date(),
@@ -238,13 +234,7 @@ const updateBank = async (req, res) => {
         name                       : bodyData.name,
         description                : bodyData.description,
         type                       : bodyData.type,
-        sector                     : bodyData.sector,
-        valueMin                   : bodyData.minValue,
-        valueMax                   : bodyData.maxValue,
-        maturity                   : bodyData.maturity,
-        warranty                   : bodyData.warranty,
-        provider                   : bodyData.provider,
-        cover                      : bodyData.cover,
+        creator                    : bodyData.creator,
         logo                       : bodyData.logo,
         status                     : bodyData.status ?? "active",
         dateCreated                : bodyData.dateCreated ?? new Date(),

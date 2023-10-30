@@ -1,6 +1,6 @@
 const express = require("express");
 const multer = require('multer')
-const clientActions = require("../controllers/actions/client");
+const userActions = require("../controllers/actions/user");
 const verify = require("../controllers/validations/verifyToken");
 
 const router = express.Router();
@@ -22,11 +22,11 @@ var storage = multer.diskStorage({
   var upload = multer({ storage: storage })
 
 
-router.get('/', clientActions.getAllClients);
-router.get('/:uID', clientActions.getClient);
-router.post('/register', clientActions.createClient);
-router.post("/login", clientActions.loginClient);
-router.patch('/update/:uID', upload.array('myFiles'), clientActions.updateClient);
-router.delete('/:uID', clientActions.deleteClient);
+router.get('/', userActions.getAllUsers);
+router.get('/:uID', userActions.getUser);
+router.post('/register', userActions.createUser);
+router.post("/login", userActions.loginUser);
+router.patch('/update/:uID', upload.array('myFiles'), userActions.updateUser);
+router.delete('/:uID', userActions.deleteUser);
 
 module.exports = router;

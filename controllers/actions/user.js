@@ -16,7 +16,7 @@ app.use(express.json())
 app.use(bodyParser.json());
 
 
-const Clients = require('../../models/Client.js');
+const Users = require('../../models/User.js');
 const { string } = require('@hapi/joi');
 
 
@@ -24,13 +24,13 @@ const { string } = require('@hapi/joi');
 
 const router = express.Router();
 
-const getAllClients = async(req, res) => {
+const getAllUsers = async(req, res) => {
 
     try{
        
 
 
-        const mQuery = 'SELECT * FROM clients';
+        const mQuery = 'SELECT * FROM users';
 
 
         const date = new Date();
@@ -65,14 +65,14 @@ const getAllClients = async(req, res) => {
     }
 }
 
-const getClient = async(req, res) => {
+const getUser = async(req, res) => {
     const uID = req.params.uID;
     
     try{
        
 
 
-        const mQuery = 'SELECT * FROM clients WHERE id = ?';
+        const mQuery = 'SELECT * FROM users WHERE id = ?';
        
 
         mysqlConnection.query(mQuery,[uID], (error, rows, fields) => {
@@ -110,17 +110,18 @@ const getClient = async(req, res) => {
 
 }
 
-const createClient = async (req, res) => {
+const createUser = async (req, res) => {
    
    
     
     //const hashedPassword = await bcrypt.hash(req.body.password, salt);
     const hashedPassword = req.body.password;
-
-
     let bodyData =  req.body;
+
+    console.log("==========>");
+    console.log(bodyData);
     
-    const newClient = new Clients({
+    const newUser = new Users({
 
 
             name: bodyData.name,
@@ -129,6 +130,7 @@ const createClient = async (req, res) => {
             password: hashedPassword,
             profile: bodyData.profile,
             company: bodyData.company,
+            type: bodyData.type,
             location: bodyData.location,
             status: bodyData.status,
             dateCreated: bodyData.dateCreated
@@ -136,7 +138,7 @@ const createClient = async (req, res) => {
     
     try{
 
-        const mQuerySelect = 'SELECT * FROM clients WHERE email = ?';
+        const mQuerySelect = 'SELECT * FROM users WHERE email = ?';
        
 
         mysqlConnection.query(mQuerySelect,[bodyData.email], (error, rows, fields) => {
@@ -154,8 +156,8 @@ const createClient = async (req, res) => {
                    
                 }else{
 
-                    const mQuery = 'INSERT INTO clients SET?';
-                    mysqlConnection.query(mQuery, newClient, (error, rows, fields) => {
+                    const mQuery = 'INSERT INTO users SET?';
+                    mysqlConnection.query(mQuery, newUser, (error, rows, fields) => {
                         
                         if (!error){
             
@@ -163,7 +165,7 @@ const createClient = async (req, res) => {
                           
                             const uID = rows.insertId;
 
-                            const mQuery = 'SELECT * FROM clients WHERE id = ?';
+                            const mQuery = 'SELECT * FROM users WHERE id = ?';
        
 
                             mysqlConnection.query(mQuery,[uID], (error, rows, fields) => {
@@ -216,14 +218,9 @@ const createClient = async (req, res) => {
 }
 
 
-const loginClient = async (req, res) => {
+const loginUser = async (req, res) => {
 
-    //validate data before using it
-    // const {error} = loginValidation(req.body);
-    // if(error) return res.status(400).json({
-    //     success: false,
-    //     message: error.details[0].message
-    // });
+    
 
 
     const bodyData = req.body;
@@ -231,7 +228,7 @@ const loginClient = async (req, res) => {
 
     try{
 
-        const mQuerySelect = 'SELECT * FROM clients WHERE email = ?';
+        const mQuerySelect = 'SELECT * FROM users WHERE email = ?';
        
         
         mysqlConnection.query(mQuerySelect,[bodyData.email], async (error, rows, fields) => {
@@ -239,23 +236,23 @@ const loginClient = async (req, res) => {
             if (!error)
             
                 if(rows[0]){
-                    const client =  rows[0];
+                    const user =  rows[0];
 
                     
-                    const validPass = bodyData.password === client.password;
+                    const validPass = bodyData.password === user.password;
                     if(!validPass) return res.status(400).json({
                         success: false,
                         message: 'Invalid password'});
                 
                 
-                        const token = jwt.sign({_id: client.id.toString()}, process.env.TOKEN_SECRET);
+                        const token = jwt.sign({_id: user.id.toString()}, process.env.TOKEN_SECRET);
                 
                         res.header('auth-token', token).json(
                         { 
                             success: true,
-                            message: client.id.toString(),
+                            message: user.id.toString(),
                             authToken: token,
-                            contentData: client
+                            contentData: user
                 
                         });
                 }else{
@@ -279,7 +276,7 @@ const loginClient = async (req, res) => {
 }
 
 
-const updateClient = async (req, res) => {
+const updateUser= async (req, res) => {
 
     const uID = req.params.uID;
     
@@ -292,7 +289,7 @@ const updateClient = async (req, res) => {
     }
 
     
-    const newClient = new Clients({
+    const newUser = new Users({
 
         name: bodyData.name,
         email: bodyData.email,
@@ -300,6 +297,7 @@ const updateClient = async (req, res) => {
         password: hashedPassword,
         profile: bodyData.profile,
         company: bodyData.company,
+        type: bodyData.type,
         location: bodyData.location,
         status: bodyData.status,
         dateCreated: bodyData.dateCreated
@@ -307,23 +305,23 @@ const updateClient = async (req, res) => {
     
     try{
 
-        const mQuery = 'UPDATE clients SET? WHERE id =?';
-        mysqlConnection.query(mQuery, [newClient, uID], (error, rows, fields) => {
+        const mQuery = 'UPDATE users SET? WHERE id =?';
+        mysqlConnection.query(mQuery, [newUser, uID], (error, rows, fields) => {
             
             if (!error){
 
 
-                const mQuerySelect = 'SELECT * FROM clients WHERE id = ?';
+                const mQuerySelect = 'SELECT * FROM users WHERE id = ?';
        
         
                 mysqlConnection.query(mQuerySelect,[uID], async (error, rows, fields) => {
                     
                     if (!error)
                         if(rows[0]){
-                            const client =  rows[0];
+                            const user =  rows[0];
                             res.status(200).json({
                                 success: true,
-                                contentData: client
+                                contentData: user
                             });
                            
                         }else{
@@ -358,14 +356,14 @@ const updateClient = async (req, res) => {
 }
 
 
-const deleteClient = async (req, res) => {
+const deleteUser = async (req, res) => {
 
     const uID = req.params.uID;
 
     
     try{
 
-        const mQuery = 'DELETE FROM clients WHERE id = ?';
+        const mQuery = 'DELETE FROM users WHERE id = ?';
         mysqlConnection.query(mQuery, [uID], (error, rows, fields) => {
             
             if (!error){
@@ -398,9 +396,9 @@ const deleteClient = async (req, res) => {
 }
 
 
-module.exports.getAllClients = getAllClients;
-module.exports.createClient = createClient;
-module.exports.loginClient = loginClient;
-module.exports.getClient = getClient;
-module.exports.updateClient = updateClient;
-module.exports.deleteClient = deleteClient;
+module.exports.getAllUsers = getAllUsers;
+module.exports.createUser = createUser;
+module.exports.loginUser = loginUser;
+module.exports.getUser = getUser;
+module.exports.updateUser = updateUser;
+module.exports.deleteUser = deleteUser;

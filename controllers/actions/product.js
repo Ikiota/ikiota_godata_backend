@@ -194,7 +194,6 @@ const addProduct = async (req, res) => {
             warranty                   : bodyData.warranty,
             provider                   : bodyData.provider,
             cover                      : bodyData.cover,
-            logo                       : bodyData.logo,
             status                     : bodyData.status ?? "active",
             dateCreated                : bodyData.dateCreated ?? new Date(),
         });

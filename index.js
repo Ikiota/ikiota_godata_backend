@@ -4,7 +4,7 @@ const cors = require('cors');
 
 
 const adminsRouter = require("./routes/admins")
-const clientsRouter  = require("./routes/clients")
+const usersRouter  = require("./routes/users")
 const companiesRouter  = require("./routes/companies")
 const productsRouter  = require("./routes/products")
 const banksRouter  = require("./routes/banks")
@@ -38,7 +38,7 @@ app.use('/uploads', Express.static(__dirname +'/uploads'));
 
 
     app.use('/admins', adminsRouter);
-    app.use('/clients', clientsRouter);
+    app.use('/users', usersRouter);
     app.use('/companies', companiesRouter);
     app.use('/products', productsRouter);
     app.use('/banks', banksRouter);
@@ -51,7 +51,7 @@ app.use('/uploads', Express.static(__dirname +'/uploads'));
 
 
 
-    var clients = {};
+    var users = {};
     //Socket Logic
     socketio.on("connection", (userSocket) => {
 
