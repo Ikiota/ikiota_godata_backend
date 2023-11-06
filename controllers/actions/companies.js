@@ -122,10 +122,6 @@ const registerCompany = async (req, res) => {
     
 
     const newCompany = new Companies({
-
-
-            
-
     raisonSociale                          : bodyData.raisonSociale,
     sigle                                  : bodyData.sigle,
     formeJuridique                         : bodyData.formeJuridique,
@@ -174,8 +170,9 @@ const registerCompany = async (req, res) => {
     detailsAntecedentsFiscales             : bodyData.detailsAntecedentsFiscales,
     user                                   : bodyData.user,
     status                                 : bodyData.status,
+    quote                                  : bodyData.quote
     
-        });
+});
     
     try{
         
@@ -384,6 +381,7 @@ const updateCompany = async (req, res) => {
     detailsAntecedentsFiscales             : bodyData.detailsAntecedentsFiscales,
     user                                   : bodyData.user,
     status                                 : bodyData.status,
+    quote                                  : bodyData.quote,
     
         });
     

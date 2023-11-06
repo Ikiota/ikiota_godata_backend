@@ -8,6 +8,7 @@ const usersRouter  = require("./routes/users")
 const companiesRouter  = require("./routes/companies")
 const productsRouter  = require("./routes/products")
 const banksRouter  = require("./routes/banks")
+const applicationsRouter  = require("./routes/applications")
 
 const multer = require('multer')
 
@@ -42,6 +43,7 @@ app.use('/uploads', Express.static(__dirname +'/uploads'));
     app.use('/companies', companiesRouter);
     app.use('/products', productsRouter);
     app.use('/banks', banksRouter);
+    app.use('/applications', applicationsRouter);
     
 
 
