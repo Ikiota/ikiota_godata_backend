@@ -49,7 +49,9 @@ var Company = function(company){
     this.detailsAntecedentsFiscales             = company.detailsAntecedentsFiscales;
     this.user                                   = company.user;
     this.status                                 = company.status;
-    this.quote                                  = company.quote;
+    this.creditScore                            = company.creditScore;
+    this.carboneFootprint                       = company.carboneFootprint;
+    this.financialNote                          = company.financialNote;
     
     
   };
