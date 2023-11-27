@@ -199,7 +199,7 @@ const addProduct = async (req, res) => {
         });
     
     try{
-        console.log(newProduct);
+        
 
         const mQuerySelect = 'SELECT * FROM products WHERE name = ?';
         

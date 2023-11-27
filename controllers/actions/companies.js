@@ -392,8 +392,6 @@ const updateCompany = async (req, res) => {
     financialNote                          : bodyData.financialNote,
     
 });
-console.log("===========edit");
-console.log(mCompany);
 
     try{
 
