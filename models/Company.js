@@ -2,6 +2,7 @@
 var Company = function(company){
 
     this.raisonSociale                          = company.raisonSociale;
+    this.category                               = company.category;
     this.sigle                                  = company.sigle;
     this.formeJuridique                         = company.formeJuridique;
     this.logo                                   = company.logo;

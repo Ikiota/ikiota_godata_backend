@@ -123,12 +123,13 @@ const registerCompany = async (req, res) => {
 
     const newCompany = new Companies({
     raisonSociale                          : bodyData.raisonSociale,
+    category                               : bodyData.category,
     sigle                                  : bodyData.sigle,
     formeJuridique                         : bodyData.formeJuridique,
     logo                                   : bodyData.logo,
     statutsOrganigramme                    : bodyData.statutsOrganigramme,
     dateCreation                           : bodyData.dateCreation,
-    tdateDebutTravaux                      : bodyData.dateDebutTravaux,
+    dateDebutTravaux                      : bodyData.dateDebutTravaux,
     dateAutorisation                       : bodyData.dateAutorisation,
     autorisationOuverture                  : bodyData.autorisationOuverture,
     activitePrincipale                     : bodyData.activitePrincipale,
@@ -170,7 +171,11 @@ const registerCompany = async (req, res) => {
     detailsAntecedentsFiscales             : bodyData.detailsAntecedentsFiscales,
     user                                   : bodyData.user,
     status                                 : bodyData.status,
-    quote                                  : bodyData.quote
+    creditScore                            : bodyData.creditScore,
+    carboneFootprint                       : bodyData.carboneFootprint,
+    financialNote                          : bodyData.financialNote,
+
+    
     
 });
     
@@ -334,12 +339,13 @@ const updateCompany = async (req, res) => {
             
 
     raisonSociale                          : bodyData.raisonSociale,
+    category                               : bodyData.category,
     sigle                                  : bodyData.sigle,
     formeJuridique                         : bodyData.formeJuridique,
     statutsOrganigramme                    : bodyData.statutsOrganigramme,
     logo                                   : bodyData.logo,
     dateCreation                           : bodyData.dateCreation,
-    tdateDebutTravaux                      : bodyData.dateDebutTravaux,
+    dateDebutTravaux                       : bodyData.dateDebutTravaux,
     dateAutorisation                       : bodyData.dateAutorisation,
     autorisationOuverture                  : bodyData.autorisationOuverture,
     activitePrincipale                     : bodyData.activitePrincipale,
@@ -381,10 +387,14 @@ const updateCompany = async (req, res) => {
     detailsAntecedentsFiscales             : bodyData.detailsAntecedentsFiscales,
     user                                   : bodyData.user,
     status                                 : bodyData.status,
-    quote                                  : bodyData.quote,
+    creditScore                            : bodyData.creditScore,
+    carboneFootprint                       : bodyData.carboneFootprint,
+    financialNote                          : bodyData.financialNote,
     
-        });
-    
+});
+console.log("===========edit");
+console.log(mCompany);
+
     try{
 
         const mQuery = 'UPDATE companies SET? WHERE id =?';
