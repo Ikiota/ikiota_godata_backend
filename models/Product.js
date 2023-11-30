@@ -10,6 +10,7 @@ var Product = function(product){
     this.valueMin                   = product.valueMin;
     this.valueMax                   = product.valueMax;
     this.maturity                   = product.maturity;
+    this.interestRate               = product.interestRate;
     this.warranty                   = product.warranty;
     this.provider                   = product.provider;
     this.cover                      = product.cover;
