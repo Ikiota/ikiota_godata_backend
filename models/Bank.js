@@ -11,7 +11,7 @@ var Bank = function(bank){
     this.type                       = bank.type;
     this.creator                    = bank.creator;
     this.logo                       = bank.logo;
-    this.status                     = bank.status ?? "active";
+    this.status                     = bank.status ?? "pending";
     this.dateCreated                = bank.dateCreated ?? new Date();
     
   };
